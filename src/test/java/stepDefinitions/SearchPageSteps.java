@@ -4,6 +4,8 @@ package stepDefinitions;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import managers.PageObjectManager;
+import managers.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import pageObjects.SearchPage;
 
@@ -15,16 +17,20 @@ import static org.junit.Assert.assertTrue;
 public class SearchPageSteps {
 
     SearchPage searchPage;
-    public WebDriver driver;
+    WebDriver driver;
+    PageObjectManager pageObjectManager;
+    WebDriverManager webDriverManager;
 
     public SearchPageSteps() {
-        driver = Hooks.driver;
-        searchPage = new SearchPage(driver);
+        webDriverManager = new WebDriverManager();
+        driver = webDriverManager.getDriver();
+        pageObjectManager = new PageObjectManager(driver);
+        searchPage = pageObjectManager.getSearchPage();
     }
 
     @Given("User landed on {string} Page")
     public void userLandedOnPage(String url) throws IOException {
-        driver.get(url);
+        searchPage.navigateToSearchPage(url);
     }
 
     @Then("Verify search box is displayed as expected")
